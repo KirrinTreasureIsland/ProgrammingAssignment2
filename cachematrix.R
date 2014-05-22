@@ -1,3 +1,6 @@
+## R programming
+## Programming Assignment 2
+
 ## A pair of functions that cache the inverse of a matrix.
 
 ## 1. makeCacheMatrix: Creates a special "matrix" object that can cache its inverse
