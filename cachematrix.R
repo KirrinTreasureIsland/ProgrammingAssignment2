@@ -25,29 +25,29 @@
 # Output: special "matrix", list of 'set','get','setinv','getinv'
 
 makeCacheMatrix <- function(x = matrix()) {
-  # variable 'm' is firstly initialized as NULL:
-  m <- NULL
+    # variable 'm' is firstly initialized as NULL:
+    m <- NULL
   
-  # function 'set' is defined as a function which takes an argument 'y'
-  # it assigns 'x' this argument 'y' and assigns 'm' the value NULL
-  set <- function(y) {
-    # we use <<-  to assign a value to an object in an environment 
-    # that is different from the current environment
-    x <<- y       # 'x' is assigned the value 'y' 
-    m <<- NULL    # 'm' is assigned NULL
-  }
+    # function 'set' is defined as a function which takes an argument 'y'
+    # it assigns 'x' this argument 'y' and assigns 'm' the value NULL
+    set <- function(y) {
+        # we use <<-  to assign a value to an object in an environment 
+        # that is different from the current environment
+        x <<- y       # 'x' is assigned the value 'y' 
+        m <<- NULL    # 'm' is assigned NULL
+    }
   
-  # function 'get' returns 'x' (so we "get" the matrix 'x')
-  get <- function() x
+    # function 'get' returns 'x' (so we "get" the matrix 'x')
+    get <- function() x
   
-  # function 'setinv' assigns 'm' the argument of the function
-  setinv <- function(solve) m <<- solve
+    # function 'setinv' assigns 'm' the argument of the function
+    setinv <- function(solve) m <<- solve
   
-  # function 'getinv' returns 'm' (so we "get" the inverse 'm')
-  getinv <- function() m
+    # function 'getinv' returns 'm' (so we "get" the inverse 'm')
+    getinv <- function() m
   
-  # list of the functions defined above: 'set', 'get', 'getinv', 'setinv'
-  list(set = set, get = get,
+    # list of the functions defined above: 'set', 'get', 'getinv', 'setinv'
+    list(set = set, get = get,
        setinv = setinv,
        getinv = getinv)
 }
@@ -66,25 +66,25 @@ makeCacheMatrix <- function(x = matrix()) {
 #         ordinary matrix type
 
 cacheSolve <- function(x, ...) {
-  # variable 'm' is assigned the value of 'getinv' part of 'x'
-  # 'getinv' part of 'x' is
-  #     either: NULL - in the case the inverse of 'x' has not been computed and cached yet
-  #     or: the cached inverse matrix
-  m <- x$getinv()
+    # variable 'm' is assigned the value of 'getinv' part of 'x'
+    # 'getinv' part of 'x' is
+    #     either: NULL - in the case the inverse of 'x' has not been computed and cached yet
+    #     or: the cached inverse matrix
+    m <- x$getinv()
   
-  # if 'm' is not NULL, it means that the inverse of the matrix 'x' is cached and contained in 'm'
-  # in this case:  
-  if(!is.null(m)) {
-    message("getting cached data")   # the message is printed
-    return(m)                        # the cached inverse 'm' is returned (ordinary matrix type)
-  }                                       
+    # if 'm' is not NULL, it means that the inverse of the matrix 'x' is cached and contained in 'm'
+    # in this case:  
+    if(!is.null(m)) {
+        message("getting cached data")   # the message is printed
+        return(m)                        # the cached inverse 'm' is returned (ordinary matrix type)
+    }                                       
   
-  # if 'm' is NULL, it means that the inverse of the matrix 'x' has not been computed yet
-  # in this case:
-  data <- x$get()         # we assign the matrix 'x' to the variable data as a regular matrix type
-  m <- solve(data, ...)   # we assign the inverse of 'data' to 'm' (also a ordinary matrix type)
-  x$setinv(m)             # we assign this inverse as 'setinv' part of 'x', so that it gets cached
-  m                       # the inverse 'm' is returned (ordinary matrix type)
+    # if 'm' is NULL, it means that the inverse of the matrix 'x' has not been computed yet
+    # in this case:
+    data <- x$get()         # we assign the matrix 'x' to the variable data as a regular matrix type
+    m <- solve(data, ...)   # we assign the inverse of 'data' to 'm' (also a ordinary matrix type)
+    x$setinv(m)             # we assign this inverse as 'setinv' part of 'x', so that it gets cached
+    m                       # the inverse 'm' is returned (ordinary matrix type)
 }
 
 ## ----------------
@@ -146,22 +146,22 @@ matrix2 <- matrix(rnorm(1000^2),nrow=1000)
 
 ## Test 1
 system.time({
-  solve(matrix2)
+   solve(matrix2)
 })
 # user  system elapsed 
 # 2.22    0.02    2.24 
 
 ## Test 2
 system.time({
-  m2 <- makeCacheMatrix(matrix2)
-  cacheSolve(m2)
+    m2 <- makeCacheMatrix(matrix2)
+    cacheSolve(m2)
 })
 # user  system elapsed 
 # 2.20    0.02    2.25
 
 ## Test3
 system.time({
-  cacheSolve(m2)
+   cacheSolve(m2)
 })
 # getting cached data
 # user  system elapsed 
